@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "OnlineSubsystem.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -49,6 +50,19 @@ AUENetMenuSystemCharacter::AUENetMenuSystemCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	//在线子系统
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get(); //获取在线子系统  
+	if(OnlineSubsystem)
+	{
+		OnlineSessionInterface = OnlineSubsystem->GetSessionInterface(); //获取子系统名称
+
+		if(GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("获取子系统 %s"), *OnlineSubsystem->GetSubsystemName().ToString())); //默认为SubsystemNULL, 我们使用Steam子系统
+		}
+	}
+	
 }
 
 void AUENetMenuSystemCharacter::BeginPlay()
@@ -64,6 +78,11 @@ void AUENetMenuSystemCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+}
+
+void AUENetMenuSystemCharacter::CreateSession()
+{
+	
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -5,8 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "OnlineSubsystem.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "UENetMenuSystemCharacter.generated.h"
-
 
 UCLASS(config=Game)
 class AUENetMenuSystemCharacter : public ACharacter
@@ -62,5 +63,14 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+public:
+	TSharedPtr<class IOnlineSession, ESPMode::ThreadSafe> OnlineSessionInterface; //指向在线会话接口
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	void CreateSession(); //创建会话
+
+	//FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate; //创建会话完成委托
 };
 
